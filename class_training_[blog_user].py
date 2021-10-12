@@ -28,7 +28,7 @@ class BlogUser:
     def show_all_posts(self):
         for post in self.posts:
             print(post)
-        # 블로그 유저의 모든 게시글 출력
+            # 블로그 유저의 모든 게시글 출력
 
     def __str__(self):
         return f"안녕하세요 {self.name}입니다.\n"
