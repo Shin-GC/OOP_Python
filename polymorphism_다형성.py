@@ -8,11 +8,16 @@ class Shape(ABC):
     @abstractmethod
     def area(self) -> float:
         """도형의 넓이를 리턴한다: 자식 클래스가 오버라이딩할 것"""
-        pass
+        print("도형의 넓이: ")  # super 를 통해 print 상속받기
 
     @abstractmethod
     def perimeter(self) -> float:
         """도형의 둘레를 리턴한다: 자식 클래스가 오버라이딩할 것"""
+        print("도형의 둘레: ")  # super 를 통해 print 상속받기
+
+    @property
+    @abstractmethod
+    def x(self) -> int:
         pass
 
 
@@ -39,26 +44,34 @@ class Paint:
 
 
 class RightTriangle(Shape):
-    def __init__(self, base, height):
+    def __init__(self, base, height, x):
         self.base = base
         self.height = height
+        self.x = x
 
     def area(self) -> float:
+        super().area()
         return self.base * (self.height / 2)
 
     def perimeter(self) -> float:
-        return (self.base ** 2 + self.height ** 2) ** (1/2) + self.base + self.height
+        super().area()
+        return (self.base ** 2 + self.height ** 2) ** (1 / 2) + self.base + self.height
+
+    @property
+    def x(self):
+        return self._x
+
+    @x.setter
+    def x(self, value):
+        self._x = value
 
 
-right_triangle_1 = RightTriangle(3, 4)
-right_triangle_2 = RightTriangle(5, 12)
-right_triangle_3 = RightTriangle(6, 8)
+right_triangle_1 = RightTriangle(3, 4, 2)
 
 paint_program = Paint()
 
 paint_program.add_shape(right_triangle_1)
-paint_program.add_shape(right_triangle_2)
-paint_program.add_shape(right_triangle_3)
 
 print(paint_program.total_area_of_shapes())
 print(paint_program.total_perimeter_of_shapes())
+print(right_triangle_1.x)
