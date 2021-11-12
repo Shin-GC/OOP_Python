@@ -2,20 +2,19 @@ from abc import ABC, abstractmethod
 
 
 class Vehicle(ABC):
-
     @abstractmethod
     def start(self):
-        """추상 메소드 start: 교통 수단의 주행을 시작한다."""
+        """추상 메소드 start: 교통 수단의 주행을 시작한다"""
         pass
 
     @property
     @abstractmethod
-    def speed(self) -> int:
-        """변수 _speed( 교통 수단의 속도 )에 대한 추상 getter 메소드"""
+    def speed(self):
+        """변수 _speed(교통 수단의 속도)에 대한 추상 getter 메소드"""
         pass
 
     def stop(self):
-        """일반 메소드 stop: 교통 수단의 속도를 0으로 바꾼다."""
+        """일반 메소드 stop: 교통 수단의 속도를 0으로 바꾼다"""
         self.speed = 0
 
 
@@ -38,7 +37,7 @@ class Bicycle(Vehicle):
         self.speed = Bicycle.max_speed / 3
 
     def __str__(self):
-        return f"이 자전거는 현재 {self.speed}km/h로 주행 중입니다."
+        return "이 자전거는 현재 {}km/h로 주행 중입니다.".format(self.speed)
 
 
 class NormalCar(Vehicle):
@@ -60,7 +59,8 @@ class NormalCar(Vehicle):
         self.speed = self.max_speed / 2
 
     def __str__(self):
-        return f"이 일반 자동차는 현재 {self.speed}km/h로 주행 중입니다."
+        return "이 일반 자동차는 현재 {}km/h로 주행 중입니다.".format(self.speed)
+
 
 class SportsCar(Vehicle):
 
@@ -77,37 +77,71 @@ class SportsCar(Vehicle):
         self._speed = new_value if 0 <= new_value <= self.max_speed else 0
 
     def start(self):
-        self.speed = self.max_speed
         print("스포츠카 시동겁니다.")
+        self.speed = self.max_speed
 
     def __str__(self):
-        return f"이 스포츠카는 현재 {self.speed}km/h로 주행 중입니다."
+        return "이 스포츠카는 현재 {}km/h로 주행 중입니다.".format(self.speed)
 
 
-# 코드를 쓰세요
+class DrivingSimulator:
+    def __init__(self):
+        """교통 수단 인스턴스들을 담을 리스트를 변수로 갖는다"""
+        self.transportation = []
+
+    def add_vehicle(self, new_vehicle):
+        """교통 수단 인스턴스들만 시뮬레이터에 추가될 수 있게 한다"""
+        if isinstance(new_vehicle, Vehicle):
+            self.transportation.append(new_vehicle)
+        else:
+            print(f"{new_vehicle}은 교통 수단이 아니기 때문에 추가할 수 없습니다.")
+
+    def start_all_vehicles(self):
+        """모든 교통 수단을 주행 시작시킨다"""
+        print("모든 교통 수단을 주행 시작시킵니다!\n")
+        for t in self.transportation:
+            t.start()
+
+    def stop_all_vehicles(self):
+        """모든 교통 수단을 주행 정지시킨다"""
+        print("모든 교통 수단을 주행 정지시킵니다!\n")
+        for t in self.transportation:
+            t.stop()
+
+    def __str__(self):
+        """갖고 있는 교통 수단들의 현재 속도를 문자열로 리턴한다"""
+        str_vehicle = ""
+        for t in self.transportation:
+            str_vehicle += f"{t.__str__()}\n"
+        return str_vehicle
 
 
 # 자전거 인스턴스
 bicycle = Bicycle(0)
 
-# 일반 자동차 인스턴스
-car = NormalCar(0, 100)
+# 일반 자동차 인스턴스들
+car_1 = NormalCar(0, 100)
+car_2 = NormalCar(0, 120)
 
-# 스포츠카 인스턴스
-sports_car = SportsCar(0, 200)
+# 스포츠카 인스턴스들
+sports_car_1 = SportsCar(0, 200)
+sports_car_2 = SportsCar(0, 190)
 
-# 정의한 인스턴스들을 모두 주행 시작시킨다
-bicycle.start()
-car.start()
-sports_car.start()
+# 주행 시뮬레이터 인스턴스
+driving_simulator = DrivingSimulator()
 
-# 자전거의 속도를 출력한다
-print(bicycle)
+# 교통 수단 인스턴스들을 주행 시뮬레이터에 추가한다
+driving_simulator.add_vehicle(bicycle)
+driving_simulator.add_vehicle(car_1)
+driving_simulator.add_vehicle(car_2)
+driving_simulator.add_vehicle(sports_car_1)
+driving_simulator.add_vehicle(sports_car_2)
+driving_simulator.add_vehicle(1)
 
-# 자전거만 주행을 멈춰준다
-bicycle.stop()
+# 시뮬레이터 내 모든 인스턴스들을 주행 시작시킨다
+driving_simulator.start_all_vehicles()
+print(driving_simulator)
 
-# 결과 값을 출력한다
-print(bicycle)
-print(car)
-print(sports_car)
+# 시뮬레이터 내 모든 인스턴스들을 주행 정지시킨다
+driving_simulator.stop_all_vehicles()
+print(driving_simulator)
